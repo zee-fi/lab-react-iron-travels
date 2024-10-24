@@ -1,12 +1,22 @@
 import travelPlansData from "../assets/travel-plans.json";
+import { useState } from "react";
+
 
 function TravelList() {
     const travelList = travelPlansData;
+    
+    const [travelListToDisplay, setTravelListToDisplay] = useState(travelList);
 
+    const deleteTravelObj = (travelId) => {
+        const newArray = travelListToDisplay.filter((travelObj) => {
+            return travelObj.id !== travelId;  
+        })
+        setTravelListToDisplay(newArray);
+    }
+    
     return (
         <div className="travelListContainer">
-            {travelList.map((travelObj) => {
-                // Define label inside the map function
+            {travelListToDisplay.map((travelObj) => {
                 let label;
                 if (travelObj.totalCost < 350) {
                     label = <span className="dealLabel">Deal</span>;
@@ -22,8 +32,8 @@ function TravelList() {
                         <p>All inclusive: {travelObj.allInclusive ? "Yes" : "No"}</p>
                         <p>Total cost: {travelObj.totalCost}</p>
                         <p>Description: {travelObj.description}</p>
-                        {/* Display the label if defined */}
                         {label && <div>{label}</div>}
+                        <button onClick={() => {deleteTravelObj(travelObj.id)}}>Delete</button>
                     </div>
                 );
             })}
